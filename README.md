@@ -1,5 +1,7 @@
 # Andreas' lecture recording setup
 
+(work in progress, more to follow)
+
 ## Source material
 
 ### Room adudio/video
