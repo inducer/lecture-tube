@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Andreas Kloeckner">
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+
+    <script src="js/jquery.js"></script>
+    <script src="js/splitter.js"></script>
+    <script src="js/popcorn-complete.js"></script>
+    <script src="js/sprintf.js"></script>
+    <script src="js/main.js"></script>
+
+  </head>
+
+  <body>
+    <div id="header">
+      <div id="controls">
+        <form>
+          <img src="img/glyphicons/184_volume_up.png" style="height:20px">
+          <select id="audio-selector">
+          </select>
+        </form>
+      </div>
+      <div id="title">
+        <h1 id="title-text"></h1>
+      </div>
+
+    </div>
+    <div id="container">
+      <div id="top-pane" class="pane">
+        <div id="left-pane" class="pane video-pane" >
+          <video id="left-video" controls data-audiotype="room">
+          </video>
+        </div>
+
+        <div id="right-pane" class="pane video-pane">
+          <video id="right-video" controls data-audiotype="speaker">
+          </video>
+        </div>
+      </div>
+      <div id="bottom-pane" class="pane">
+        <div id="bottom-content">
+          <div id="messagearea"></div>
+          Slides: (click to seek)
+          <ul id="slidelist">
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

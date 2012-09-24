@@ -1,0 +1,72 @@
+html, body
+{
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: sans-serif;
+}
+#header { padding: 1em; }
+
+#container {
+  min-width: 500px;
+  min-height: 300px;
+  height: 100%;
+}
+.pane {
+  overflow: auto;
+  background: #def;
+}
+#left-pane {
+  width:57%;
+}
+
+video {
+  width:100%;
+}
+
+#bottom-content {
+  padding:1em;
+}
+
+
+/* Splitbar styles; these are the default class names */
+
+.vsplitbar {
+  width: 6px;
+  background: #ccc url(../img/vgrabber.gif) no-repeat center;
+}
+.vsplitbar:hover, .vsplitbar.active {
+  background: #666 url(../img/vgrabber.gif) no-repeat center;
+  opacity: 0.7;
+  filter: alpha(opacity=70); /* IE */
+}
+.hsplitbar {
+  height: 6px;
+  background: #ccc url(../img/hgrabber.gif) no-repeat center;
+}
+.hsplitbar.active, .hsplitbar:hover {
+  background: #666 url(../img/hgrabber.gif) no-repeat center;
+  opacity: 0.7;
+  filter: alpha(opacity=70); /* IE */
+}
+
+#slidelist li {
+  cursor:pointer;
+}
+
+#slidelist li:hover {
+  text-decoration:underline;
+}
+
+#controls {
+  float:right;
+}
+
+#header #title h1 {
+  margin-top:0;
+  margin-bottom:0;
+}
+
+#messagearea {
+  float:right;
+}

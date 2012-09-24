@@ -1,0 +1,28 @@
+#! /bin/sh
+
+set -e
+
+SRC="$1"
+
+if test "$SRC" = ""; then
+  echo "usage: $0 input"
+  exit 1
+fi
+
+echo "Extracting audio..."
+gst-launch \
+  filesrc location="$SRC" ! decodebin name=decoder \
+  ! wavenc !  filesink location=audio.wav
+
+echo "Running audacity to process audio..."
+audacity audio.wav
+
+echo "Remuxing audio, scaling video..."
+gst-launch-1.0 \
+  filesrc location=audio.wav ! decodebin ! audioconvert ! vorbisenc ! webmmux name=mux ! progressreport update-freq=1 ! filesink location=room.webm \
+  filesrc location="$SRC" ! qtdemux ! jpegdec ! videoscale ! 'video/x-raw,width=(int)960,height=(int)540' ! vp8enc threads=4 ! mux.
+# 800x450 also an option (+160+90)
+
+# avdec_h264 for already encoded
+
+rm audio.wav

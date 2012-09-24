@@ -1,0 +1,13 @@
+#! /bin/sh
+
+TGT="$1"
+if test "$1" = ""; then
+  echo "usage: $0 file"
+  exit 1
+fi
+if test -f "$TGT" ; then
+  echo "file $TGT already exists"
+  exit 1
+fi
+
+ffmpeg -ac 1 -f alsa -i default -r 10 -s 1024x768 -f x11grab -i :0 -sameq -f webm - > $TGT

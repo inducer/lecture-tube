@@ -1,0 +1,7 @@
+*.webm
+*.wav
+.*.swp
+*~
+*.log
+.*.swp
+*json
