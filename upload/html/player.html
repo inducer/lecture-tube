@@ -6,10 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Andreas Kloeckner">
 
+    <link rel="stylesheet" type="text/css" href="css/smoothness/jquery-ui-1.8.23.custom.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 
-    <script src="js/jquery.js"></script>
-    <script src="js/splitter.js"></script>
+    <script src="js/jquery-1.8.2.js"></script>
+    <script src="js/jquery-ui-1.8.23.custom.min.js"></script>
+    <script src="js/jquery.layout.js"></script>
     <script src="js/popcorn-complete.js"></script>
     <script src="js/sprintf.js"></script>
     <script src="js/main.js"></script>
@@ -17,40 +19,43 @@
   </head>
 
   <body>
-    <div id="header">
-      <div id="controls">
+    <div class="header ui-layout-north">
+      <div id="audio-sel-float">
         <form>
-          <img src="img/glyphicons/184_volume_up.png" style="height:20px">
-          <select id="audio-selector">
-          </select>
+          <span id="audio-sel-label" class="ui-icon ui-icon-volume-on"></span>
+          <select id="audio-selector"></select>
         </form>
       </div>
-      <div id="title">
-        <h1 id="title-text"></h1>
-      </div>
 
-    </div>
-    <div id="container">
-      <div id="top-pane" class="pane">
-        <div id="left-pane" class="pane video-pane" >
-          <video id="left-video" controls data-audiotype="room">
-          </video>
-        </div>
-
-        <div id="right-pane" class="pane video-pane">
-          <video id="right-video" controls data-audiotype="speaker">
-          </video>
-        </div>
+      <div id="toolbar-container">
+        <button id="beginning">go to beginning</button>
+        <button id="play">play</button>
       </div>
-      <div id="bottom-pane" class="pane">
-        <div id="bottom-content">
-          <div id="messagearea"></div>
-          Slides: (click to seek)
-          <ul id="slidelist">
-          </ul>
-        </div>
-      </div>
+      <div id="position-slider"></div>
+      <div id="position-label">0:00</div>
     </div>
 
+    <div class="ui-layout-center pane video-pane" >
+      <video id="left-video" data-audiotype="room">
+      </video>
+    </div>
+
+    <div class="ui-layout-east pane video-pane">
+      <video id="right-video" data-audiotype="speaker">
+      </video>
+    </div>
+
+    <div class="ui-layout-south pane">
+      <div id="bottom-content">
+        <div id="messagearea"></div>
+        <div id="title">
+          <h2 id="title-text"></h1>
+        </div>
+
+        Slides: (click to seek)
+        <ul id="slidelist">
+        </ul>
+      </div>
+    </div>
   </body>
 </html>

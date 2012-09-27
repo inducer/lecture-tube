@@ -5,49 +5,17 @@ html, body
   overflow: hidden;
   font-family: sans-serif;
 }
-#header { padding: 1em; }
-
-#container {
-  min-width: 500px;
-  min-height: 300px;
-  height: 100%;
-}
-.pane {
-  overflow: auto;
-  background: #def;
-}
-#left-pane {
-  width:57%;
-}
 
 video {
   width:100%;
 }
 
+.pane {
+  overflow:auto;
+}
+
 #bottom-content {
   padding:1em;
-}
-
-
-/* Splitbar styles; these are the default class names */
-
-.vsplitbar {
-  width: 6px;
-  background: #ccc url(../img/vgrabber.gif) no-repeat center;
-}
-.vsplitbar:hover, .vsplitbar.active {
-  background: #666 url(../img/vgrabber.gif) no-repeat center;
-  opacity: 0.7;
-  filter: alpha(opacity=70); /* IE */
-}
-.hsplitbar {
-  height: 6px;
-  background: #ccc url(../img/hgrabber.gif) no-repeat center;
-}
-.hsplitbar.active, .hsplitbar:hover {
-  background: #666 url(../img/hgrabber.gif) no-repeat center;
-  opacity: 0.7;
-  filter: alpha(opacity=70); /* IE */
 }
 
 #slidelist li {
@@ -58,15 +26,66 @@ video {
   text-decoration:underline;
 }
 
-#controls {
-  float:right;
-}
 
-#header #title h1 {
+#title h2 {
   margin-top:0;
-  margin-bottom:0;
+  margin-bottom:0.3em;
 }
 
 #messagearea {
   float:right;
 }
+
+/* ui.layout ------------------------------------------------------------------ */
+
+.ui-layout-resizer {
+  background: #ddd;
+}
+
+.ui-layout-resizer {
+  background: #ddd;
+}
+
+.ui-layout-toggler {
+  background: #aaa;
+}
+
+/* controls ------------------------------------------------------------------- */
+
+.header {
+  padding: 8px;
+  background: #555;
+  color:#888;
+}
+
+#toolbar-container {
+  font-size:11px;
+  padding-bottom:10px;
+  float:left;
+}
+
+#position-slider {
+  margin-top:9px;
+  margin-left:20px;
+  width:600px;
+  font-size:10px;
+  background:#888;
+  display:block-inline;
+  float:left;
+}
+
+#position-label {
+  margin-top:4px;
+  margin-left:10px;
+  font-weight:bold;
+  float:left;
+}
+
+#audio-sel-float {
+  float:right;
+}
+
+#audio-sel-label {
+  display:inline-block;
+}
+
