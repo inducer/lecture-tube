@@ -32,7 +32,17 @@ to time-coded log page numbers in the [Okular](https://en.wikipedia.org/wiki/Oku
 
 ## Posptrocessing
 
+### Postprocessing the room video
 
+`guvcview` partitions its output into lots of 2G-sized videos, likely to avoid some restriction on file size. This command glues the videos back together:
+
+    mencoder -oac copy -ovc copy -o dest.avi capture-{1,2,3}.avi
+
+GStreamer 1.0 doesn't like the resulting AVI file very much, so we use ffmpeg to convert to a MKV container format:
+
+    ffmpeg -i dest.avi -acodec copy -vcodec copy dest.mkv
+
+You can tell that this is a better-behaved file because all of a sudden you can seek in it in a video player.
 
 # postprocessing the screencap
 
