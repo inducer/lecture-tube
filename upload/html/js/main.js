@@ -474,13 +474,6 @@ function seek(time)
 
     var pco = popcorn_objs[tgt_id];
 
-    if (value == null)
-    {
-      // This pco didn't get a new src--just pause and ignore.
-      pco.pause();
-      continue;
-    }
-
     var src = value[0];
     var time = value[1];
     src = new URI(src).resolve(new URI(window.location.href));
