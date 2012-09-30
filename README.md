@@ -1,10 +1,9 @@
 # LectureWeb
 
 A JavaScript web player and a bunch of scripts and recipes to helps you post
-lectures (with both room video and screen capture) to the web. Care for a demo?
-Check out our [High-Performance Scientific Computing
-class](http://wiki.tiker.net/Teaching/HPCFall2012), then click any of the
-lecture videos (except the second one, where we had technical difficulties).
+lecture videos (with both room video and screen capture) to the web. 
+
+[Demo](http://www.cims.nyu.edu/~kloeckner/hpc12-video/upload/html/player.html?descriptor=metadata/2012-09-05.json)
 
 - Andreas Kloeckner <inform@itker.net>
 

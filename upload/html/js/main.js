@@ -190,8 +190,10 @@ function compute_abs_starting_points()
 
 // {{{ slide setup
 
-function set_up_slide_data()
+function set_up_jump_points()
 {
+  // {{{ process slides
+
   var slides = show_info.slide_data;
 
   if (slides == null || slides.length == 0)
@@ -220,24 +222,43 @@ function set_up_slide_data()
 
   var sync_slide_timestamp = slides[sync_slide_index][1];
 
-  // rebuild slide_data with absolute times
-  var new_slide_data = [];
+  // }}}
+
+  // {{{ build jump point list in memory
+  //
+  var all_jump_points = [];
+  all_jump_points.push(["Start", show_info.start_time])
   for (var i = 0; i < slides.length; ++i)
   {
     var nr = slides[i][0], timestamp = slides[i][1];
     var new_slide_time = timestamp - sync_slide_timestamp + sync_ref_time;
     if (new_slide_time < 0)
       new_slide_time = 0;
-    new_slide_data.push([nr, new_slide_time])
+    all_jump_points.push([sprintf("Slide %d", nr), new_slide_time])
   }
 
-  slides = new_slide_data;
-  show_info.slide_data = new_slide_data;
+  var jump_points = show_info.jump_points;
+  if (jump_points != null && jump_points.length != 0)
+  {
+    for (var i = 0; i < jump_points.length; ++i)
+    {
+      var label = jump_points[i][0];
+      var time = parse_abs_time(jump_points[i][1]);
+
+      all_jump_points.push([label, time])
+    }
+  }
+
+  all_jump_points.sort(function (row_a, row_b) { return row_a[1] - row_b[1]; })
+
+  // }}}
+
+  // {{{ build jump point list DOM
 
   var jump_point_count = 0;
   function insert_jump_point(descr, time)
   {
-    $("#slidelist").append(
+    $("#jump-list").append(
         sprintf('<li id="jump_entry_%d">%s (%s)</li>',
           jump_point_count, descr, format_time(time)));
     $(sprintf("#jump_entry_%d", jump_point_count)).click(
@@ -248,18 +269,12 @@ function set_up_slide_data()
     ++jump_point_count;
   }
 
-  var last_time = null;
-  for (var i = 0; i < slides.length; ++i)
+  for (var i = 0; i < all_jump_points.length; ++i)
   {
-    var slide_nr = slides[i][0];
-    var time = slides[i][1];
+    var label = all_jump_points[i][0];
+    var time = all_jump_points[i][1];
 
-    if ((last_time == null || last_time < show_info.start_time)
-        && show_info.start_time < time)
-      insert_jump_point("Start", show_info.start_time);
-    insert_jump_point(sprintf("Slide %d", slide_nr), time);
-
-    last_time = time;
+    insert_jump_point(label, time);
   }
 }
 
@@ -884,7 +899,7 @@ $().ready(function()
 
           // }}}
 
-          set_up_slide_data();
+          set_up_jump_points();
 
           if (show_info.end_time == null)
             alert("End time not given.");

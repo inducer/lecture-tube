@@ -18,11 +18,11 @@ video {
   padding:1em;
 }
 
-#slidelist li {
+#jump-list li {
   cursor:pointer;
 }
 
-#slidelist li:hover {
+#jump-list li:hover {
   text-decoration:underline;
 }
 
