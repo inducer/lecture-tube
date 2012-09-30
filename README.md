@@ -1,9 +1,10 @@
 # LectureWeb
 
-A JavaScript web player and a ball of scripting duct tape to helps you post
+A JavaScript web player and a bunch of scripts and recipes to helps you post
 lectures (with both room video and screen capture) to the web. Care for a demo?
 Check out our [High-Performance Scientific Computing
-class](http://wiki.tiker.net/Teaching/HPC2012).
+class](http://wiki.tiker.net/Teaching/HPCFall2012), then click any of the
+lecture videos (except the second one, where we had technical difficulties).
 
 - Andreas Kloeckner <inform@itker.net>
 
@@ -127,3 +128,8 @@ screen capture.
 (documentation to follow, just check out `upload/metadata/example.json` for now)
 
 ### Processing the slide log
+
+### Getting a parse error?
+
+Paste your JSON file into [this validator](http://jsonlint.com/). It'll tell
+you what you need to fix.
