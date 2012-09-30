@@ -26,14 +26,44 @@ video {
   text-decoration:underline;
 }
 
-
 #title h2 {
   margin-top:0;
   margin-bottom:0.3em;
 }
 
 #messagearea {
+  position:absolute;
   float:right;
+  right:30px;
+  top:60px;
+  background-color: #ccc;
+  padding:8px;
+  border-radius:5px;
+  width:400px;
+  min-height:3ex;
+  display:none;
+  z-index:5;
+}
+
+#messagearea div {
+  padding-left:5px;
+  padding-right:5px;
+}
+.msg-state {
+  margin-top:1px;
+  padding-top:3px;
+  background-color:#ddd;
+  padding-bottom:3px;
+  margin-top:1px;
+}
+
+.msg-error {
+  color:red;
+  font-weight:bold;
+}
+
+.msg-banner {
+  margin-bottom:0.5em;
 }
 
 /* ui.layout ------------------------------------------------------------------ */
@@ -74,11 +104,29 @@ video {
   float:left;
 }
 
-#position-label {
-  margin-top:4px;
-  margin-left:10px;
-  font-weight:bold;
+.time-label {
   float:left;
+  margin-top:5px;
+  font-weight:bold;
+}
+
+#position-label {
+  margin-left:10px;
+  width:8ex;
+  text-align:right;
+}
+
+#position-label.sliding {
+  color:#eee;
+}
+
+#duration-label {
+  margin-left:10px;
+}
+
+#busy-marker {
+  margin-left:10px;
+  width:20px;
 }
 
 #audio-sel-float {
@@ -89,3 +137,13 @@ video {
   display:inline-block;
 }
 
+#logo {
+  float:right;
+  padding-right:25px;
+}
+#logo a {
+  text-decoration:none;
+  color:#888;
+  font-family:sans-serif;
+  font-size:25px;
+}

@@ -1,0 +1,14 @@
+#! /bin/sh
+
+set -e
+
+SRC="$1"
+
+if test "$SRC" = ""; then
+  echo "usage: $0 input"
+  exit 1
+fi
+
+gst-launch \
+  filesrc location="$SRC" ! decodebin name=decoder \
+  ! wavenc !  filesink location=audio.wav

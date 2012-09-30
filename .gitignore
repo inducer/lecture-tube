@@ -1,7 +1,7 @@
 *.webm
 *.wav
-.*.swp
+.*.sw[op]
 *~
 *.log
-.*.swp
 *json
+.sw[op]

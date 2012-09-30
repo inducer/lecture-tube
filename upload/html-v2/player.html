@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Lecture</title>
+    <title>LectureWeb player</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Andreas Kloeckner">
 
@@ -12,13 +12,15 @@
     <script src="js/jquery-1.8.2.js"></script>
     <script src="js/jquery-ui-1.8.23.custom.min.js"></script>
     <script src="js/jquery.layout.js"></script>
-    <script src="js/popcorn-complete.js"></script>
+    <script src="js/popcorn.js"></script>
     <script src="js/sprintf.js"></script>
+    <script src="js/URI.js"></script>
     <script src="js/main.js"></script>
 
   </head>
 
   <body>
+    <div id="messagearea"></div>
     <div class="header ui-layout-north">
       <div id="audio-sel-float">
         <form>
@@ -26,13 +28,18 @@
           <select id="audio-selector"></select>
         </form>
       </div>
+      <div id="logo"><a href="http://github.com/inducer/lecture-web">LectureWeb</a></div>
 
       <div id="toolbar-container">
         <button id="beginning">go to beginning</button>
         <button id="play">play</button>
       </div>
+      <div id="busy-marker" class="time-label">
+        <img id="busy-img" src="img/busy.gif" alt="busy marker">
+      </div>
+      <div id="position-label" class="time-label">0:00</div>
       <div id="position-slider"></div>
-      <div id="position-label">0:00</div>
+      <div id="duration-label" class="time-label"></div>
     </div>
 
     <div class="ui-layout-center pane video-pane" >
@@ -47,7 +54,6 @@
 
     <div class="ui-layout-south pane">
       <div id="bottom-content">
-        <div id="messagearea"></div>
         <div id="title">
           <h2 id="title-text"></h1>
         </div>
