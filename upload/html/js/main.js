@@ -299,14 +299,6 @@ function is_playing()
       || media_state == "waiting");
 }
 
-function is_seeking()
-{
-  return (
-      media_state == "playing"
-      || media_state == "seeking_to_play"
-      || media_state == "waiting");
-}
-
 function clear_pending_seeks()
 {
   for (var tgt_id in popcorn_objs)
