@@ -62,6 +62,11 @@ video {
   font-weight:bold;
 }
 
+.msg-warning {
+  color:orangered;
+  font-weight:bold;
+}
+
 .msg-banner {
   margin-bottom:0.5em;
 }

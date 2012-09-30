@@ -234,18 +234,32 @@ function set_up_slide_data()
   slides = new_slide_data;
   show_info.slide_data = new_slide_data;
 
-  for (var i = 0; i < slides.length; ++i)
+  var jump_point_count = 0;
+  function insert_jump_point(descr, time)
   {
     $("#slidelist").append(
-        sprintf('<li id="slide_entry_%d">Slide %d (%s)</li>',
-          i, slides[i][0], format_time(slides[i][1])));
-    $(sprintf("#slide_entry_%d", i)).click(
+        sprintf('<li id="jump_entry_%d">%s (%s)</li>',
+          jump_point_count, descr, format_time(time)));
+    $(sprintf("#jump_entry_%d", jump_point_count)).click(
         function(evt)
         {
-          var slide_index = new Number(evt.target.id.substr(12));
-          var slide_nr = slides[slide_index][0];
-          seek(slides[slide_index][1]);
+          seek(time);
         });
+    ++jump_point_count;
+  }
+
+  var last_time = null;
+  for (var i = 0; i < slides.length; ++i)
+  {
+    var slide_nr = slides[i][0];
+    var time = slides[i][1];
+
+    if ((last_time == null || last_time < show_info.start_time)
+        && show_info.start_time < time)
+      insert_jump_point("Start", show_info.start_time);
+    insert_jump_point(sprintf("Slide %d", slide_nr), time);
+
+    last_time = time;
   }
 }
 
@@ -264,6 +278,7 @@ var POSSIBLE_STATES = [
 
 var media_state = null;
 var ready_count = 0;
+var broken_target_ids = [];
 var tgt_to_pending_commands = new Object;
 
 function is_busy()
@@ -282,12 +297,42 @@ function is_playing()
       || media_state == "waiting");
 }
 
-function clear_pending_commands()
+function is_seeking()
+{
+  return (
+      media_state == "playing"
+      || media_state == "seeking_to_play"
+      || media_state == "waiting");
+}
+
+function clear_pending_seeks()
 {
   for (var tgt_id in popcorn_objs)
   {
-    tgt_to_pending_commands[tgt_id] = [];
+    var i = 0;
+    var cmds = tgt_to_pending_commands[tgt_id];
+    while (i < cmds.length)
+    {
+      var cmd_name = cmds[i][0];
+      if (cmd_name == "seek")
+        cmds.splice(i, 1);
+      else
+        ++i;
+    }
   }
+}
+
+function break_or_seek(tgt_id, time)
+{
+  var pco = popcorn_objs[tgt_id];
+  if (time < 0 || time > pco.duration())
+  {
+    set_message("warning", sprintf("Seek outside of '%s'. ", tgt_id));
+    break_target_id(tgt_id);
+    return false;
+  }
+  pco.pause(time);
+  return true;
 }
 
 function execute_pending_commands(tgt_id)
@@ -302,9 +347,12 @@ function execute_pending_commands(tgt_id)
     if (cmd_name == "seek")
     {
       set_message("llprogress", sprintf("Executing pending seek on stream '%s'.", tgt_id));
-      popcorn_objs[tgt_id].currentTime(cmd_arg);
-      is_ready = false;
+      is_ready = !break_or_seek(tgt_id, cmd_arg);
       break;
+    }
+    else if (cmd_name == "set_mute")
+    {
+      popcorn_objs[tgt_id].mute(cmd_arg);
     }
     else
     {
@@ -352,6 +400,35 @@ function set_media_state(s)
   $("button#play").button( "option", options );
 }
 
+function break_target_id(tgt_id)
+{
+  if (broken_target_ids.indexOf(tgt_id) != -1)
+  {
+    // already broken
+    return;
+  }
+  broken_target_ids.push(tgt_id);
+  popcorn_objs[tgt_id].pause();
+
+  set_message("warning", "stream in broken state: "+tgt_id)
+}
+
+function unbreak_target_id(tgt_id)
+{
+  var idx = broken_target_ids.indexOf(tgt_id);
+  if (idx == -1)
+    return;
+
+  broken_target_ids.splice(idx, 1);
+  set_message("warning", "stream no longer in broken state: "+tgt_id)
+}
+
+function is_target_id_broken(tgt_id)
+{
+  return broken_target_ids.indexOf(tgt_id) != -1;
+}
+
+
 // {{{ commands
 
 function seek(time)
@@ -371,7 +448,7 @@ function seek(time)
     }
   }
 
-  clear_pending_commands();
+  clear_pending_seeks();
   if (is_playing())
   {
     // pause all media until seek completes
@@ -390,8 +467,18 @@ function seek(time)
 
   for (var tgt_id in popcorn_objs)
   {
-    var pco = popcorn_objs[tgt_id];
     var value = target_to_media_url_and_time[tgt_id];
+    if (value == null)
+    {
+      set_message("warning", "No video found during seek for "+tgt_id);
+      break_target_id(tgt_id);
+      continue;
+    }
+
+    if (is_target_id_broken(tgt_id))
+      unbreak_target_id(tgt_id);
+
+    var pco = popcorn_objs[tgt_id];
 
     if (value == null)
     {
@@ -412,7 +499,7 @@ function seek(time)
     else
     {
       set_message("llprogress", sprintf("Stream '%s' already on right file, seeking...", tgt_id));
-      pco.pause(time);
+      break_or_seek(tgt_id, time);
     }
   }
 }
@@ -424,6 +511,9 @@ function play()
     set_media_state("playing");
     for (var tgt_id in popcorn_objs)
     {
+      if (is_target_id_broken(tgt_id))
+        continue;
+
       var pco = popcorn_objs[tgt_id];
       pco.play();
     }
@@ -443,6 +533,9 @@ function pause()
     set_media_state("paused");
     for (var tgt_id in popcorn_objs)
     {
+      if (is_target_id_broken(tgt_id))
+        continue;
+
       var pco = popcorn_objs[tgt_id];
       pco.pause();
     }
@@ -453,6 +546,14 @@ function pause()
   }
   else
     set_message("Invalid media state in play: "+media_state);
+}
+
+function set_mute(tgt_id, v)
+{
+  if (media_state == "seeking")
+    tgt_to_pending_commands[tgt_id].push(["set_mute", v]);
+  else
+    popcorn_objs[tgt_id].muted(v);
 }
 
 // }}}
@@ -475,6 +576,35 @@ function can_play(evt)
   {
     // no action
   }
+  else if (media_state == "waiting")
+  {
+    var all_buffered = true;
+    for (var tgt_id in popcorn_objs)
+    {
+      if (is_target_id_broken(tgt_id))
+        continue;
+
+      var pco = popcorn_objs[tgt_id];
+      if (!pco.buffered())
+        all_buffered = false;
+    }
+
+    if (all_buffered)
+    {
+      for (var tgt_id in popcorn_objs)
+      {
+        if (is_target_id_broken(tgt_id))
+          continue;
+
+        var pco = popcorn_objs[tgt_id];
+        pco.play();
+      }
+      set_media_state("playing");
+    }
+    else
+      set_message("debug", "Couldn't resume from waiting because not "
+          + "all streams are buffered yet.");
+  }
   else
     set_message("error", "Invalid media state in can_play: "+media_state);
 }
@@ -482,14 +612,33 @@ function can_play(evt)
 function data_unavailable(evt)
 {
   set_message("event", "data_unavailable on "+this.media.id);
+}
+
+function video_waiting(evt)
+{
+  set_message("event", "waiting on "+this.media.id);
 
   if (media_state == "seeking" || media_state == "seeking_to_play")
   {
-    // apparently this can happen
+    // That's expected.
     return;
   }
+  else if (media_state == "playing")
+  {
+    // One of our streams is buffering. Pause everybody.
+    for (var tgt_id in popcorn_objs)
+    {
+      if (is_target_id_broken(tgt_id))
+        continue;
+
+      var pco = popcorn_objs[tgt_id];
+      pco.pause();
+    }
+
+    set_media_state("waiting");
+  }
   else
-    set_message("error", "Invalid media state in data_unavailable: "+media_state);
+    set_message("error", "Invalid media state in waiting: "+media_state);
 }
 
 function seek_complete(evt)
@@ -502,7 +651,7 @@ function seek_complete(evt)
     if (is_ready)
     {
       ++ready_count;
-      if (ready_count == num_popcorn_objs)
+      if (ready_count == num_popcorn_objs - broken_target_ids.length)
         set_media_state("paused");
     }
   }
@@ -512,11 +661,14 @@ function seek_complete(evt)
     if (is_ready)
     {
       ++ready_count;
-      if (ready_count == num_popcorn_objs)
+      if (ready_count == num_popcorn_objs - broken_target_ids.length)
       {
         set_media_state("playing");
         for (var tgt_id in popcorn_objs)
         {
+          if (is_target_id_broken(tgt_id))
+            continue;
+
           var pco = popcorn_objs[tgt_id];
           pco.play();
         }
@@ -529,12 +681,15 @@ function seek_complete(evt)
 
 function video_failed(e)
 {
-  set_message("event", "error on "+this.media.id);
+  set_message("error", "error on "+this.media.id);
+
+  break_target_id(this.media.id);
 
   var id = this.media.id;
   switch (e.target.error.code) {
     case e.target.error.MEDIA_ERR_ABORTED:
-      alert(sprintf("Error on stream '%s': User aborted the video playback.", id));
+      // This happens when navigating to a different page. No problem.
+      // alert(sprintf("Error on stream '%s': User aborted the video playback.", id));
       break;
     case e.target.error.MEDIA_ERR_NETWORK:
       alert(sprintf("Error on stream '%s': A network error caused the video "
@@ -556,11 +711,30 @@ function video_failed(e)
   }
 }
 
+function video_stalled(e)
+{
+  set_message("event", "stalled: "+this.media.id);
+
+  // This is just about prefetching not working as expected.
+  // No reason to break the stream.
+}
+
+function video_ended(e)
+{
+  set_message("event", "ended: "+this.media.id);
+
+  break_target_id(this.media.id);
+}
+
 function time_update(e)
 {
   // set_message("event", "time_update on "+this.media.id);
   var media_id = this.media.id;
   var time = this.currentTime();
+
+  // ignore time updates from 'broken' streams.
+  if (is_target_id_broken(media_id))
+    return;
 
   for (var i = 0; i < show_info.media.length; ++i)
   {
@@ -595,26 +769,10 @@ $().ready(function()
     +"<br><i>Available under the MIT license</i>");
   // {{{ audio handling
 
-  function update_audio_levels() {
-    for (var i = 0; i < popcorn_objs.length; i++) {
-      if (i != audio_index) {
-        popcorn_objs[i].muted(true);
-      } else {
-        popcorn_objs[i].muted(false);
-      }
-    }
-  }
-
   function select_audio(sel_player_id)
   {
     for (var player_id in popcorn_objs)
-    {
-      var pco = popcorn_objs[player_id];
-      if (player_id == sel_player_id)
-        pco.muted(false);
-      else
-        pco.muted(true);
-    }
+      set_mute(player_id, player_id != sel_player_id);
   }
 
   $("#audio-selector")
@@ -704,8 +862,28 @@ $().ready(function()
           set_message("progress", "Loaded, initializing...");
           show_info = data;
 
-          $("#title-text").html(show_info.title);
+          if (show_info.title != null)
+            $("#title-text").html(show_info.title);
+          if (show_info.blurb != null)
+            $("#blurb").html(show_info.blurb);
+
           compute_abs_starting_points();
+
+          // {{{ start/end time business
+
+          if (show_info.start_time == null)
+            show_info.start_time = 0;
+          else
+            show_info.start_time = parse_abs_time(show_info.start_time);
+
+          show_info.duration = parse_abs_time(show_info.end_time);
+          $("#position-slider")
+            .slider("option", "max", show_info.duration)
+            .slider("option", "disabled", false);
+          $("#duration-label").html(format_time(show_info.duration));
+
+          // }}}
+
           set_up_slide_data();
 
           if (show_info.end_time == null)
@@ -728,10 +906,6 @@ $().ready(function()
           }
 
           $("#audio-selector").html(audio_options);
-          if (show_info.default_audio != null)
-            select_audio(show_info.default_audio);
-          else
-            alert("No default audio track given.");
 
           // }}}
 
@@ -750,12 +924,14 @@ $().ready(function()
             popcorn_objs[tgt] = popcorn_obj;
 
             popcorn_objs[tgt].on('dataunavailable', data_unavailable);
-            popcorn_objs[tgt].on('waiting', data_unavailable);
+            popcorn_objs[tgt].on('waiting', video_waiting);
 
             popcorn_objs[tgt].on("canplay", can_play)
             popcorn_objs[tgt].on("seeked", seek_complete)
             popcorn_objs[tgt].on("error", video_failed)
+            popcorn_objs[tgt].on("stalled", video_stalled)
             popcorn_objs[tgt].on("timeupdate", time_update)
+            popcorn_objs[tgt].on("ended", video_ended)
 
             tgt_to_pending_commands[tgt] = [];
             ++num_popcorn_objs;
@@ -763,20 +939,14 @@ $().ready(function()
 
           // }}}
 
-          // {{{ start/end time business
-
-          if (show_info.start_time == null)
-            show_info.start_time = 0;
-          else
-            show_info.start_time = parse_abs_time(show_info.start_time);
-
-          show_info.duration = parse_abs_time(show_info.end_time);
-          $("#position-slider")
-            .slider("option", "max", show_info.duration)
-            .slider("option", "disabled", false);
-          $("#duration-label").html(format_time(show_info.duration));
+          // {{{ start up
 
           seek(show_info.start_time);
+
+          if (show_info.default_audio != null)
+            select_audio(show_info.default_audio);
+          else
+            alert("No default audio track given.");
 
           // }}}
 
