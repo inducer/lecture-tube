@@ -3,7 +3,7 @@
 A JavaScript web player and a bunch of scripts and recipes to helps you post
 lecture videos (with both room video and screen capture) to the web. 
 
-[Demo](http://www.cims.nyu.edu/~kloeckner/hpc12-video/upload/html/player.html?descriptor=metadata/2012-09-05.json)
+[Demo](http://www.cims.nyu.edu/~kloeckner/hpc12-video/upload/html/player.html?descriptor=metadata/2012-09-05.json) (ONLY works in Chrome for some reason, we're investigating. Firefox works fine for me locally, but not over the network.)
 
 - Andreas Kloeckner <inform@itker.net>
 
