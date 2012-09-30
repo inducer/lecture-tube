@@ -1,18 +1,5 @@
 "use strict";
 
-function get_url_parameter(name)
-{
-  // http://www.netlobo.com/url_query_string_javascript.html
-  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-  var regexS = "[\\?&]"+name+"=([^&#]*)";
-  var regex = new RegExp( regexS );
-  var results = regex.exec(window.location.href);
-  if(results == null)
-    return "";
-  else
-    return results[1];
-}
-
 function format_time(seconds)
 {
   var seconds = Math.floor(seconds);
