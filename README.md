@@ -1,7 +1,8 @@
 # LectureWeb
 
-A JavaScript web player and a bunch of scripts and recipes to helps you post
-lecture videos (with synchronized room video and screen capture) to the web.
+A JavaScript web player (see `upload/html/`) and a bunch of scripts and recipes
+to help you post lecture videos (with synchronized room video and screen
+capture) to the web.
 
 [Demo](http://www.cims.nyu.edu/~kloeckner/hpc12-video/upload/html/player.html?descriptor=metadata/2012-09-05.json)
 
@@ -212,3 +213,36 @@ warning you of fun up ahead.
 
 Next, AVI is a format without absolute timestamps, so you may also need the
 previous answer.
+
+# License
+
+LectureWeb is licensed to you under the terms of the [MIT license](http://en.m.wikipedia.org/wiki/MIT_License).
+
+Copyright (C) 2012 Andreas Klöckner
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Included Components
+
+* [jQuery Core](http://jquery.com/) (MIT license)
+* [jQuery UI](http://jqueryui.com/) (MIT license)
+* [jQuery UI Layout Plugin](http://layout.jquery-dev.net/) (MIT license)
+* [js-uri](https://code.google.com/p/js-uri/) (New BSD license)
+* [JavaScript sprintf](http://www.diveintojavascript.com/projects/javascript-sprintf) (BSD license)
+* [PopcornJS](http://popcornjs.org/) (MIT license)
