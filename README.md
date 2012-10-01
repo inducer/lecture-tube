@@ -38,8 +38,9 @@ Requirements:
 ### Room audio/video
 
 We record room video and audio using a [Logitech HD Pro
-C910](http://www.amazon.com/Logitech-HD-Pro-Webcam-C910/dp/B003M2YT96)  (or
-equivalent). The exact model is perhaps not so important, but
+C910](http://www.amazon.com/Logitech-HD-Pro-Webcam-C910/dp/B003M2YT96). I paid
+about $60 for this when it was on sale at some point. The exact model is
+perhaps not so important, but
 [UVC](https://en.wikipedia.org/wiki/USB_video_device_class) cameras are
 generally easier to deal with than non-UVC webcams. In addition, that model
 (and its successors) can record in
@@ -114,7 +115,7 @@ mic](https://en.wikipedia.org/wiki/Lavalier_microphone) ("JH3308") off ebay
 despite the plasticky appearance of the mic's transmitter and receiver.
 
 *Slight stumbling block:* My laptop only has a combined
-[TRRS](https://en.wikipedia.org/wiki/TRRS) headphone/microphone jack. To make
+3.5mm [TRRS](https://en.wikipedia.org/wiki/TRRS) headphone/microphone jack. To make
 this work with the 1/4-inch TRS plug of the mic, I bought a 3.5mm TRRS plug
 (male) and a 1/4-inch TRS jack (female) on Ebay. A half-hour soldering session
 later, everything was ready to go.

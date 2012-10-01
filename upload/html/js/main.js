@@ -263,6 +263,8 @@ function set_up_jump_points()
 
     insert_jump_point(label, time);
   }
+
+  // }}}
 }
 
 // }}}
@@ -754,6 +756,14 @@ $().ready(function()
   set_message("banner",
     "<strong><a href=\"https://github.com/inducer/lecture-web\">LectureWeb</a> 2012.1alpha</strong>"
     +"<br><i>Available under the MIT license</i>");
+
+
+  if (!$.browser.chrome)
+  {
+    set_message("warning", "LectureWeb works best in Google Chrome for now. See the "
+      +"<a href=\"https://github.com/inducer/lecture-web\">project page</a> for more info.");
+  }
+
   // {{{ audio handling
 
   function select_audio(sel_player_id)
@@ -770,7 +780,7 @@ $().ready(function()
         });
 
   // }}}
-  //
+
   // {{{ UI setup
 
   $("body").layout({
