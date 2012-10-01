@@ -1,7 +1,7 @@
 # LectureWeb
 
 A JavaScript web player and a bunch of scripts and recipes to helps you post
-lecture videos (with both room video and screen capture) to the web. 
+lecture videos (with both room video and screen capture) to the web.
 
 [Demo](http://www.cims.nyu.edu/~kloeckner/hpc12-video/upload/html/player.html?descriptor=metadata/2012-09-05.json) (ONLY works in Chrome for some reason, we're investigating. Firefox works fine for me locally, but not over the network.)
 
@@ -16,7 +16,6 @@ Requirements:
 * [gstreamer 1.0](http://gstreamer.org) (postprocessing)
 * [ffmpeg](http://ffmpeg.org) (postprocessing)
 * [audacity](http://audacity.sourceforge.net/) (noise removal)
-* [mplayer](https://en.wikipedia.org/wiki/MPlayer) (glue videos together)
 
 (In other words: yes, this uses most free/open-source video processing packages
 available today. Suggestions on how to reduce this number are welcome, but on
@@ -33,14 +32,44 @@ equivalent). In any case, make sure to get a decent-quality
 [UVC](https://en.wikipedia.org/wiki/USB_video_device_class) camera capable of
 1920p.
 
-I use guvcview on Linux for lecture recording to capture AVI encapsulated MJPEG
-(video) and MP3 (audio). Careful: don't use the MKV/Matroska container format
-in guvcview--it becomes unusable after a crash. (v1.5.3, 9/24/2012) At 1920p,
-you will get about 20GB of data for a two-hour lecture.
+I use guvcview on Linux to capture room video. I recommend the MKV
+("Matroska") video container format.  These considerations enter into this
+choice:
+
+* It supports files of arbitrary size. AVI (the other choice in guvcview)
+  does not, and thus you get lots of little files that are fun to glue back
+  together.
+
+* AVI only supports a frame rate, not an absolute presentation timestamp
+  (unlike Matroska). That means your video is subject to fun clock drift.
+
+* Unlike AVI, the MKV support in guvcview is not crash-proof. If guvcview
+  dies/crashes (it hasn't yet for me), it will take your video with it.
+
+See below (under "recovering from accidents") if you've already got AVI source
+material.
+
+Further settings in guvcview are important:
+
+* Make sure to choose your frame rate and audio sample rate so that one is
+  an integer multiple of the other. Otherwise you may get clock drift
+  that's a pain to recover from if you want to synchronize with the screen
+  capture. (Again, see 'recovering from accidents' below.)
+
+* Use MJPEG as the video format. That's what comes out of the camera. If
+  you're capturing in 1920p (you should), even my somewhat beefy Sandy
+  Bridge laptop can't transcode to anything in real time, not even lowly
+  MPEG2.
+
+* Audio format doesn't really matter. You might as well save some space and
+  use MP3. (Your audio is pretty poor anyhow, unless you're using a fancy
+  mic.)
+
+At 1920p, you will get about 20GB of data for a two-hour lecture.
 
 guvcview lets you can manipulate exposure and focus as you're recording. It
 generally has tons of settings, and it can display a VU meter so you can verify
-that audio is being recorded.
+that plausible audio is being recorded.
 
 An alternative on Macs is [this Logitech
 program](http://www.logitech.com/en-us/435/6816?section=downloads&bit=&osid=9),
@@ -81,18 +110,6 @@ PDF readers/presentation programs welcome.
 
 ### Postprocessing the room video
 
-guvcview partitions its output into lots of 2G-sized videos, likely to avoid
-some restriction on file size. This command glues the videos back together:
-
-    mencoder -oac copy -ovc copy -o dest.avi capture-{1,2,3}.avi
-
-GStreamer 1.0 doesn't like the resulting AVI file very much, so we use ffmpeg
-to convert to an MKV container format:
-
-    ffmpeg -i dest.avi -acodec copy -vcodec copy dest.mkv
-
-You can tell that this is a better-behaved file because all of a sudden you can
-seek in it in a video player.
 
 Next, use
 
@@ -132,3 +149,40 @@ screen capture.
 
 Paste your JSON file into [this validator](http://jsonlint.com/). It'll tell
 you what you need to fix.
+
+## Recovering from accidents
+
+### I recorded with an audio rate that is not an integer multiple of my frame rate.
+
+Some part of your video processing pipeline will drop frames on you, and
+audio/video sync will be ever so slightly off. If you recorded with a
+non-absolute format, too (accidents come in pairs, at least for me), then
+your video will accumulate clock drift (perhaps 20 seconds in two hours),
+and you won't be synchronized with your screen capture.
+
+This command can help you recover:
+
+    ffmpeg -i video/2012-09-26-room.webm -filter setpts=1.0038487282463187*PTS new-speed.webm
+
+PTS stands for 'presentation timestamp' and is an absolute time. You'll
+probably have to adjust the factor.
+
+### I recorded my guvcview video in AVI
+
+Welcome to a world of hurt. First, guvcview starts a new AVI file every
+1.9GB, so you need to glue those files back together.  This command does that:
+
+    mencoder -oac copy -ovc copy -o dest.avi capture-{1,2,3}.avi
+
+GStreamer 1.0 doesn't like the resulting AVI file very much, so we use ffmpeg
+to convert to an MKV container format:
+
+    ffmpeg -i dest.avi -acodec copy -vcodec copy dest.mkv
+
+You can tell that this is a better-behaved file because all of a sudden you can
+seek in it in a video player. If you've made the mistake of mismatch frame
+rate and audio rate, you'll see "duplicating/dropping frame" messages
+warning you of fun up ahead.
+
+Next, AVI is a format without absolute timestamps, so you may also need the
+previous answer.
