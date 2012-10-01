@@ -106,6 +106,19 @@ This [Wikipedia
 page](https://en.wikipedia.org/wiki/Comparison_of_screencasting_software) has
 an overview of other software alternatives.
 
+#### Audio for the screen capture
+
+I bought a cheapo [Lavalier
+mic](https://en.wikipedia.org/wiki/Lavalier_microphone) ("JH3308") off ebay
+(~$20) that I connect to the audio-in of my laptop. This works very well,
+despite the plasticky appearance of the mic's transmitter and receiver.
+
+*Slight stumbling block:* My laptop only has a combined
+[TRRS](https://en.wikipedia.org/wiki/TRRS) headphone/microphone jack. To make
+this work with the 1/4-inch TRS plug of the mic, I bought a 3.5mm TRRS plug
+(male) and a 1/4-inch TRS jack (female) on Ebay. A half-hour soldering session
+later, everything was ready to go.
+
 ### Capturing slide numbers
 
 Use
