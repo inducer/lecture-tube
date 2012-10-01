@@ -1,7 +1,7 @@
 # LectureWeb
 
 A JavaScript web player and a bunch of scripts and recipes to helps you post
-lecture videos (with both room video and screen capture) to the web.
+lecture videos (with synchronized room video and screen capture) to the web.
 
 [Demo](http://www.cims.nyu.edu/~kloeckner/hpc12-video/upload/html/player.html?descriptor=metadata/2012-09-05.json)
 
@@ -35,7 +35,7 @@ Requirements:
 
 ## Source material
 
-### Room adudio/video
+### Room audio/video
 
 We record room video and audio using a [Logitech HD Pro
 C910](http://www.amazon.com/Logitech-HD-Pro-Webcam-C910/dp/B003M2YT96)  (or
