@@ -56,10 +56,10 @@ Further settings in guvcview are important:
   that's a pain to recover from if you want to synchronize with the screen
   capture. (Again, see 'recovering from accidents' below.)
 
-* Use MJPEG as the video format. That's what comes out of the camera. If
-  you're capturing in 1920p (you should), even my somewhat beefy Sandy
-  Bridge laptop can't transcode to anything in real time, not even lowly
-  MPEG2.
+* Use MJPEG as the video format. That's what comes out of the camera.
+  (Actually, there's a setting for that, too. Make sure that's what it's set
+  to. If you're capturing in 1920p (you should), even my somewhat beefy Sandy
+  Bridge laptop can't transcode to anything in real time, not even lowly MPEG2.
 
 * Audio format doesn't really matter. You might as well save some space and
   use MP3. (Your audio is pretty poor anyhow, unless you're using a fancy
