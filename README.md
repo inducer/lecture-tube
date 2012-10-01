@@ -5,9 +5,11 @@ lecture videos (with both room video and screen capture) to the web.
 
 [Demo](http://www.cims.nyu.edu/~kloeckner/hpc12-video/upload/html/player.html?descriptor=metadata/2012-09-05.json) (ONLY works in Chrome for some reason, we're investigating. Firefox works fine for me locally, but not over the network.)
 
-- Andreas Kloeckner <inform@itker.net>
+Note that all of this is a work in progress. We're currently learning our
+way.
 
-(this is a work in progress, more to follow)
+Andreas Kloeckner <inform@itker.net>
+
 
 Requirements:
 
@@ -17,20 +19,18 @@ Requirements:
 * [ffmpeg](http://ffmpeg.org) (postprocessing)
 * [audacity](http://audacity.sourceforge.net/) (noise removal)
 
-(In other words: yes, this uses most free/open-source video processing packages
-available today. Suggestions on how to reduce this number are welcome, but on
-the other hand, all of these are very easy to install in any Linux recent
-distribution.)
+(We may be able to get rid of gstreamer as a dependency at some point.)
 
 ## Source material
 
 ### Room adudio/video
 
-Record room video and audio using a [Logitech HD Pro
+I record room video and audio using a [Logitech HD Pro
 C910](http://www.amazon.com/Logitech-HD-Pro-Webcam-C910/dp/B003M2YT96)  (or
-equivalent). In any case, make sure to get a decent-quality
-[UVC](https://en.wikipedia.org/wiki/USB_video_device_class) camera capable of
-1920p.
+equivalent). The exact model is perhaps not so important, but
+[UVC](https://en.wikipedia.org/wiki/USB_video_device_class) cameras are
+generally easier to deal with. In addition, that model (and its successors) can
+record in [1080p](https://en.wikipedia.org/wiki/1080p).
 
 I use guvcview on Linux to capture room video. I recommend the MKV
 ("Matroska") video container format.  These considerations enter into this
@@ -58,14 +58,14 @@ Further settings in guvcview are important:
 
 * Use MJPEG as the video format. That's what comes out of the camera.
   (Actually, there's a setting for that, too. Make sure that's what it's set
-  to. If you're capturing in 1920p (you should), even my somewhat beefy Sandy
+  to. If you're capturing in 1080p (you should), even my somewhat beefy Sandy
   Bridge laptop can't transcode to anything in real time, not even lowly MPEG2.
 
 * Audio format doesn't really matter. You might as well save some space and
   use MP3. (Your audio is pretty poor anyhow, unless you're using a fancy
   mic.)
 
-At 1920p, you will get about 20GB of data for a two-hour lecture.
+At 1080p, you will get about 20GB of data for a two-hour lecture.
 
 guvcview lets you can manipulate exposure and focus as you're recording. It
 generally has tons of settings, and it can display a VU meter so you can verify
@@ -110,10 +110,9 @@ PDF readers/presentation programs welcome.
 
 ### Postprocessing the room video
 
-
 Next, use
 
-    ./extract-audio dest.mkv
+    ./extract-audio capture-N.mkv
 
 to write the audio to a separate file `audio.wav`. Open this in Audacity,
 select a bit of background noise (it'll be there, trust me). Click "Effect >
@@ -123,7 +122,7 @@ Using "File > Export", simply save over the existing `audio.wav`.
 
 Lastly, use
 
-    ./process-room-video-guvcview-avi dest.mkv
+    ./merge-audio-and-encode-room-video capture-N.mkv
 
 Make sure that the noise-filtered audio.wav is in the current directory. This produces
 `room.webm`, which is your final room video.
@@ -136,8 +135,8 @@ resulting file is not seekable. This command fixes that:
 
     ffmpeg -i screencap.webm -vcodec copy processed-screencap.webm
 
-If the audio is broken, simply add `-an`. The resulting file is your final
-screen capture.
+If the audio is broken (it happens), simply add `-an`. The resulting file is
+your final screen capture.
 
 ## Writing the lecture info file
 
