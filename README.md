@@ -164,7 +164,7 @@ you what you need to fix.
 
 ## Recovering from accidents
 
-### I recorded with an audio rate that is not an integer multiple of my frame rate.
+### I recorded with an audio rate that is not an integer multiple of my frame rate
 
 Some part of your video processing pipeline will drop frames on you, and
 audio/video sync will be ever so slightly off. If you recorded with a
