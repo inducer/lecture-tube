@@ -3,7 +3,19 @@
 A JavaScript web player and a bunch of scripts and recipes to helps you post
 lecture videos (with both room video and screen capture) to the web.
 
-[Demo](http://www.cims.nyu.edu/~kloeckner/hpc12-video/upload/html/player.html?descriptor=metadata/2012-09-05.json) (ONLY works in Chrome for some reason, we're investigating. Firefox works fine for me locally, but not over the network.)
+[Demo](http://www.cims.nyu.edu/~kloeckner/hpc12-video/upload/html/player.html?descriptor=metadata/2012-09-05.json)
+
+Browser support:
+* Chrome
+* Firefox (broken at the moment, [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=795686))
+
+Unsupported:
+* Safari (doesn't support [WebM](https://en.wikipedia.org/wiki/WebM))
+* Internet Explorer (doesn't support WebM either)
+
+Support could conceivably be broadened to browsers not supporting WebM
+by also storing MPEG4-encoded videos. The player would require some
+modifications in this case.
 
 Note that all of this is a work in progress. We're currently learning our
 way.
