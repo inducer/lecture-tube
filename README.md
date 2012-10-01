@@ -37,12 +37,13 @@ Requirements:
 
 ### Room adudio/video
 
-I record room video and audio using a [Logitech HD Pro
+We record room video and audio using a [Logitech HD Pro
 C910](http://www.amazon.com/Logitech-HD-Pro-Webcam-C910/dp/B003M2YT96)  (or
 equivalent). The exact model is perhaps not so important, but
 [UVC](https://en.wikipedia.org/wiki/USB_video_device_class) cameras are
-generally easier to deal with. In addition, that model (and its successors) can
-record in [1080p](https://en.wikipedia.org/wiki/1080p).
+generally easier to deal with than non-UVC webcams. In addition, that model
+(and its successors) can record in
+[1080p](https://en.wikipedia.org/wiki/1080p).
 
 I use guvcview on Linux to capture room video. I recommend the MKV
 ("Matroska") video container format.  These considerations enter into this
@@ -70,7 +71,7 @@ Further settings in guvcview are important:
 
 * Use MJPEG as the video format. That's what comes out of the camera.
   (Actually, there's a setting for that, too. Make sure that's what it's set
-  to. If you're capturing in 1080p (you should), even my somewhat beefy Sandy
+  to.) If you're capturing in 1080p (you should), even my somewhat beefy Sandy
   Bridge laptop can't transcode to anything in real time, not even lowly MPEG2.
 
 * Audio format doesn't really matter. You might as well save some space and
