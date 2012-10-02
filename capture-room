@@ -10,29 +10,35 @@ if test -f "$TGT" ; then
   exit 1
 fi
 
-export GST_DEBUG=4
+QARGS="max-size-bytes=1000000000 max-size-time=0"
+pavucontrol &
+guvcview -o > /dev/null 2&>1 &
+
+for i in 6 5 4 3 2 1; do
+	echo "starting stream in $i..."
+	sleep 1
+done
+
 gst-launch-1.0 --eos-on-shutdown \
-  v4l2src device=/dev/video0 name=vsrc \
-  ! 'image/jpeg,width=(int)1280,height=(int)720,framerate=(fraction)30/1' \
+  v4l2src device="/dev/video0" \
+  ! 'image/jpeg,width=(int)1920,height=(int)1080,framerate=(fraction)15/1' \
   ! tee name=jpeg-video-t \
   \
   jpeg-video-t. \
-  ! queue \
+  ! queue $QARGS \
   ! jpegdec \
   ! videoscale \
   ! 'video/x-raw,width=(int)640,height=(int)360' \
   ! autovideosink \
   \
   jpeg-video-t. \
-  ! queue \
-  ! matroskamux name=mux \
-  ! queue \
+  ! queue $QARGS \
+  ! matroskamux name=mux streamable=true \
+  ! queue $QARGS \
   ! filesink location="$TGT" \
   \
-  alsasrc device="default" \
-  ! 'audio/x-raw,rate=(int)24000' \
-  ! mux.
+  pulsesrc \
+  ! 'audio/x-raw,rate=(int)22050' \
+  ! audiorate \
+  ! mux.audio_0
 
-# to change:
-# - alsa device
-# - resolution
