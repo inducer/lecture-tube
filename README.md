@@ -47,6 +47,9 @@ generally easier to deal with than non-UVC webcams. In addition, that model
 (and its successors) can record in
 [1080p](https://en.wikipedia.org/wiki/1080p).
 
+**Update:** After more experimentation, guvcview has proven itself promising,
+but incapable of recording ~2 h of video while maintaining reasonable sync.
+
 I use guvcview on Linux to capture room video. I recommend the MKV
 ("Matroska") video container format.  These considerations enter into this
 choice:
@@ -214,7 +217,7 @@ warning you of fun up ahead.
 Next, AVI is a format without absolute timestamps, so you may also need the
 previous answer.
 
-# License
+## License
 
 LectureWeb is licensed to you under the terms of the [MIT license](http://en.m.wikipedia.org/wiki/MIT_License).
 
