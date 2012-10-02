@@ -1,4 +1,4 @@
-# LectureWeb
+# LectureTube
 
 A JavaScript web player (see `upload/html/`) and a bunch of scripts and recipes
 to help you post lecture videos (with synchronized room video and screen
@@ -219,7 +219,7 @@ previous answer.
 
 ## License
 
-LectureWeb is licensed to you under the terms of the [MIT license](http://en.m.wikipedia.org/wiki/MIT_License).
+LectureTube is licensed to you under the terms of the [MIT license](http://en.m.wikipedia.org/wiki/MIT_License).
 
 Copyright (C) 2012 Andreas Klöckner
 

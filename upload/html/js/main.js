@@ -1,5 +1,5 @@
 /*
- * LectureWeb player
+ * LectureTube player
  *
  * Copyright (C) 2012 Andreas Kloeckner
 
@@ -778,14 +778,14 @@ function time_update(e)
 $().ready(function()
 {
   set_message("banner",
-    "<strong><a href=\"https://github.com/inducer/lecture-web\">LectureWeb</a> 2012.1alpha</strong>"
+    "<strong><a href=\"https://github.com/inducer/lecture-tube\">LectureTube</a> 2012.1alpha</strong>"
     +"<br><i>Available under the MIT license</i>");
 
 
   if (!$.browser.chrome)
   {
-    set_message("warning", "LectureWeb works best in Google Chrome for now. See the "
-      +"<a href=\"https://github.com/inducer/lecture-web\">project page</a> for more info.");
+    set_message("warning", "LectureTube works best in Google Chrome for now. See the "
+      +"<a href=\"https://github.com/inducer/lecture-tube\">project page</a> for more info.");
   }
 
   // {{{ audio handling
