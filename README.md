@@ -4,7 +4,7 @@ A JavaScript web player (see `upload/html/`) and a bunch of scripts and recipes
 to help you post lecture videos (with synchronized room video and screen
 capture) to the web.
 
-[Demo](http://www.cims.nyu.edu/~kloeckner/hpc12-video/upload/html/player.html?descriptor=metadata/2012-09-05.json)
+[Demo](http://www.cs.nyu.edu/courses/fall12/CSCI-GA.2945-001/video/upload/html/player.html?descriptor=metadata/2012-09-05.json)
 
 Browser support:
 * Chrome
@@ -52,10 +52,10 @@ gstreamer. I've packaged this up in a script:
 
     ./capture-room room-2012-10-3.mkv
 
-I recommend the MKV ("Matroska") video container format.  These considerations
-enter into this choice:
+I recommend the MKV ("[Matroska](https://en.wikipedia.org/wiki/Matroska)")
+video container format.  These considerations enter into this choice:
 
-* It supports files of arbitrary size. AVI (the other choice in guvcview)
+* It supports files of arbitrary size. AVI (a common, but dangerous choice!)
   does not, and thus you get lots of little files that are fun to glue back
   together.
 
