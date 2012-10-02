@@ -27,12 +27,12 @@ Andreas Kloeckner <inform@itker.net>
 Requirements:
 
 * A good webcam (see below)
-* [guvcview](http://guvcview.sourceforge.net/) (camera recording)
-* [gstreamer 1.0](http://gstreamer.org) (postprocessing)
+* [gstreamer 1.0](http://gstreamer.org) (capture, postprocessing)
 * [ffmpeg](http://ffmpeg.org) (postprocessing)
 * [audacity](http://audacity.sourceforge.net/) (noise removal)
-
-(We may be able to get rid of gstreamer as a dependency at some point.)
+* [pulseaudio](http://pulseaudio.org/) (audio routing during capture)
+* [guvcview](http://guvcview.sourceforge.net/)
+  (optional, provides focus/exposure controls during capture)
 
 ## Source material
 
@@ -47,12 +47,13 @@ generally easier to deal with than non-UVC webcams. In addition, that model
 (and its successors) can record in
 [1080p](https://en.wikipedia.org/wiki/1080p).
 
-**Update:** After more experimentation, guvcview has proven itself promising,
-but incapable of recording ~2 h of video while maintaining reasonable sync.
+Our current approach to capturing what's going on in the classroom is to use
+gstreamer. I've packaged this up in a script:
 
-I use guvcview on Linux to capture room video. I recommend the MKV
-("Matroska") video container format.  These considerations enter into this
-choice:
+    ./capture-room room-2012-10-3.mkv
+
+I recommend the MKV ("Matroska") video container format.  These considerations
+enter into this choice:
 
 * It supports files of arbitrary size. AVI (the other choice in guvcview)
   does not, and thus you get lots of little files that are fun to glue back
@@ -61,18 +62,21 @@ choice:
 * AVI only supports a frame rate, not an absolute presentation timestamp
   (unlike Matroska). That means your video is subject to fun clock drift.
 
-* Unlike AVI, the MKV support in guvcview is not crash-proof. If guvcview
-  dies/crashes (it hasn't yet for me), it will take your video with it.
+* "Streamable" MKV is crash-proof. Even if the machine dies, the video
+  up to that point will be usable.
 
-See below (under "recovering from accidents") if you've already got AVI source
-material.
+See below (under "recovering from accidents") if you've already got AVI or
+other source material.
 
-Further settings in guvcview are important:
+If you're rigging your own recording, here are some lessons I've learned:
 
 * Make sure to choose your frame rate and audio sample rate so that one is
   an integer multiple of the other. Otherwise you may get clock drift
   that's a pain to recover from if you want to synchronize with the screen
   capture. (Again, see 'recovering from accidents' below.)
+
+  For reference, I use a frame rate of 15fps, which is good enough for
+  lecture footage.
 
 * Use MJPEG as the video format. That's what comes out of the camera.
   (Actually, there's a setting for that, too. Make sure that's what it's set
@@ -85,13 +89,17 @@ Further settings in guvcview are important:
 
 At 1080p, you will get about 20GB of data for a two-hour lecture.
 
-guvcview lets you can manipulate exposure and focus as you're recording. It
-generally has tons of settings, and it can display a VU meter so you can verify
-that plausible audio is being recorded.
+guvcview can be run in controls-only mode and lets you can manipulate exposure
+and focus as you're recording.
 
 An alternative on Macs is [this Logitech
 program](http://www.logitech.com/en-us/435/6816?section=downloads&bit=&osid=9),
 but this has failed us in various ways (bad audio, truncated video).
+
+guvcview (link above) looked promising as a full capture solution, but v1.6.0
+and earlier gave us terrible trouble when trying to maintain reasonable sync
+through ~2h of video.  The author assured me that v1.6.1 fixes this, but I
+haven't verified that claim.
 
 ### Capturing the screen
 
@@ -133,9 +141,13 @@ Use
 to log time-coded page numbers in the
 [Okular](https://en.wikipedia.org/wiki/Okular) PDF viewer.
 
-Not on Linux or don't have Okular? All you need to do is write a seconds-based
-timestamp and the current PDF slide number to a file. Scripts/patches for other
-PDF readers/presentation programs welcome.
+Not on Linux or don't have Okular? All you need to do is write a line to a
+file every second or so containing
+
+    TIMESTAMP SLIDE_NUMBER
+
+The timestamp is seconds-based and allowed to contain a decimal point.
+Scripts/patches for other PDF readers/presentation programs welcome.
 
 ## Posptrocessing
 
