@@ -27,12 +27,15 @@ Andreas Kloeckner <inform@itker.net>
 Requirements:
 
 * A good webcam (see below)
+* [gstreamer 0.10](http://gstreamer.org) (postprocessing)
 * [gstreamer 1.0](http://gstreamer.org) (capture, postprocessing)
 * [ffmpeg](http://ffmpeg.org) (postprocessing)
 * [audacity](http://audacity.sourceforge.net/) (noise removal)
 * [pulseaudio](http://pulseaudio.org/) (audio routing during capture)
 * [guvcview](http://guvcview.sourceforge.net/)
   (optional, provides focus/exposure controls during capture)
+
+(For now, you need both gstreamer versions, because of a bug.)
 
 ## Source material
 
@@ -78,14 +81,13 @@ If you're rigging your own recording, here are some lessons I've learned:
   For reference, I use a frame rate of 15fps, which is good enough for
   lecture footage.
 
-* Use MJPEG as the video format. That's what comes out of the camera.
-  (Actually, there's a setting for that, too. Make sure that's what it's set
-  to.) If you're capturing in 1080p (you should), even my somewhat beefy Sandy
-  Bridge laptop can't transcode to anything in real time, not even lowly MPEG2.
+* Use MJPEG as the video format. That's what comes out of the camera.  If
+  you're capturing in 1080p (you should), even my somewhat beefy Sandy Bridge
+  laptop can't transcode to anything in real time, not even lowly MPEG2.
 
-* Audio format doesn't really matter. You might as well save some space and
-  use MP3. (Your audio is pretty poor anyhow, unless you're using a fancy
-  mic.)
+* Audio format doesn't really matter. You might as well save some space and use
+  MP3. Your room audio is going to be pretty poor anyhow, unless you're using
+  a fancy mic. Noise filtering (as described below) helps.
 
 At 1080p, you will get about 20GB of data for a two-hour lecture.
 
@@ -153,15 +155,16 @@ Scripts/patches for other PDF readers/presentation programs welcome.
 
 ### Postprocessing the room video
 
-Next, use
+Use
 
     ./extract-audio capture-N.mkv
 
-to write the audio to a separate file `audio.wav`. Open this in Audacity,
-select a bit of background noise (it'll be there, trust me). Click "Effect >
-Noise Removal", then "Get Noise Profile". Next, select the entire file
-(Ctrl+A), and click "Effect > Noise Removal" again, and just accept with "Ok".
-Using "File > Export", simply save over the existing `audio.wav`.
+to write the audio to a separate file `audio.wav` (gets created in the current
+directory). Open this in Audacity, select a bit of background noise (it'll be
+there, trust me). Click "Effect > Noise Removal", then "Get Noise Profile".
+Next, select the entire file (Ctrl+A), and click "Effect > Noise Removal"
+again, and just accept with "Ok".  Using "File > Export", simply save over the
+existing `audio.wav`.
 
 Lastly, use
 
@@ -176,21 +179,67 @@ The screen capture gets recorded in streaming mode. This is good because that
 means the file is usable even if your machine crashes. It's bad because the
 resulting file is not seekable. This command fixes that:
 
-    ffmpeg -i screencap.webm -vcodec copy processed-screencap.webm
+    ffmpeg -i screencap.webm -codec copy processed-screencap.webm
 
 If the audio is broken (it happens), simply add `-an`. The resulting file is
 your final screen capture.
 
 ## Writing the lecture info file
 
-(documentation to follow, just check out `upload/metadata/example.json` for now)
+Make a copy of `upload/metadata/example.json` and open that in a text editor.
+This is a [JSON file](https://en.wikipedia.org/wiki/JSON), which has a specific
+syntax. 
 
-### Processing the slide log
+Add all your media files as parts of the `"media"` array, giving each of them a
+unique `"id"` field.  Using the `"target"` property you can set where the video
+is going to play. (By default, there are `"left-video"` and `"right-video"`.
+But if you modify `"upload/html/player.html"`, you could conceivably add
+more/different targets.  (Targets are HTML5 `video` or `audio` elements.)
+The `"src"` entries are relative to where you keep `"player.html"`.
 
-### Getting a parse error?
+In many places of the file, you'll see time specifications of the form
 
-Paste your JSON file into [this validator](http://jsonlint.com/). It'll tell
-you what you need to fix.
+    ["room", [1, 20, 20]]
+
+This means, "at the 1:20:20 mark of the video with id `"room"`". You may leave
+out the 'hours' field if it's not needed.
+
+LectureTube automatically builds a global timeline of all media. To enable it
+to do that, you need to tell it where to synchronize your media file with some
+preceding one, in the `"sync"` property of a `"media"` element. Just find one
+point in both videos (a slide change or some such), and record the time in the
+video to by synced in `"my_time"`, and the time in the video you're syncing to
+in `"target_time"`, in the time specification format described above. Note that
+here you may only refer to media that are textually before the one being
+synced.
+
+To add slide numbers, run the slide page log through this script:
+
+    ./process-slide-numbers pagelog-10-03.txt
+
+It will produce JSON ouptut that you can paste verbatim into the
+`"slide_data"` property.  Make sure to add a comma at the end if needed. The
+`"sync_slide_*"` properties synchronize the slides with the remaining media.
+Again, identify a slide change and tell LectureTube where that happens by
+using a time specification as above.
+
+Next, upload the entire `upload` directory to a web server. (The player will
+*not* work as a local file, because of its use of
+[XHRs](https://en.wikipedia.org/wiki/XMLHttpRequest).
+Build a URL like so:
+
+    http://your-server.edu/.../upload/html/player.html?descriptor=metadata/example.json
+
+The `descriptor` URL is relative to `player.html`, but with an implicit "../"
+added at the front.
+
+You may also specify a starting point as an additional parameter:
+
+    http://your-server.edu/.../upload/html/player.html?descriptor=...&seek=1:20:04
+
+When you load your JSON file into the player for the first time, it may report
+a 'parse error'. If that happens, paste your JSON file into [this
+validator](http://jsonlint.com/). It'll tell you what you need to fix.
 
 ## Recovering from accidents
 
@@ -209,7 +258,7 @@ This command can help you recover:
 PTS stands for 'presentation timestamp' and is an absolute time. You'll
 probably have to adjust the factor.
 
-### I recorded my guvcview video in AVI
+### I recorded my video in AVI
 
 Welcome to a world of hurt. First, guvcview starts a new AVI file every
 1.9GB, so you need to glue those files back together.  This command does that:
