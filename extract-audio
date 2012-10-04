@@ -9,6 +9,6 @@ if test "$SRC" = ""; then
   exit 1
 fi
 
-gst-launch-1.0 \
-  filesrc location="$SRC" ! decodebin name=decoder \
+gst-launch \
+  filesrc location="$SRC" ! decodebin \
   ! wavenc !  filesink location=audio.wav

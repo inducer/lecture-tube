@@ -962,7 +962,29 @@ $().ready(function()
 
           // {{{ start up
 
-          seek(show_info.start_time);
+          var start_time = show_info.start_time;
+          var start_time_param = query.getParam("seek");
+          if (start_time_param != null)
+          {
+            var ary = start_time_param.split(":");
+            var t_ary = [];
+            for (var i = 0; i < ary.length; ++i)
+            {
+              var component = parseInt(ary[i]);
+              if (component.toString() == "NaN")
+              {
+                t_ary = null;
+                break;
+              }
+              t_ary.push(component);
+            }
+            if (t_ary == null)
+              alert("Could not parse 'seek' parameter.");
+            else
+              start_time = parse_min_sec_time(t_ary);
+          }
+
+          seek(start_time);
 
           if (show_info.default_audio != null)
             select_audio(show_info.default_audio);
