@@ -271,7 +271,7 @@ to convert to an MKV container format:
     ffmpeg -i dest.avi -acodec copy -vcodec copy dest.mkv
 
 You can tell that this is a better-behaved file because all of a sudden you can
-seek in it in a video player. If you've made the mistake of mismatch frame
+seek in it in a video player. If you've made the mistake of mismatching frame
 rate and audio rate, you'll see "duplicating/dropping frame" messages
 warning you of fun up ahead.
 
