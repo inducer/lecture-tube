@@ -12,7 +12,7 @@ fi
 
 QARGS="max-size-bytes=1000000000 max-size-time=0"
 pavucontrol &
-guvcview -o > /dev/null 2&>1 &
+guvcview -o > /dev/null 2>&1 &
 
 for i in 6 5 4 3 2 1; do
 	echo "starting stream in $i..."
