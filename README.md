@@ -4,8 +4,8 @@
 
 Lecture Tube consists of:
 
-* A JavaScript web player (see `upload/html/`) 
-* a bunch of scripts and (manual) recipes 
+* a JavaScript web player (see `upload/html/`)
+* a bunch of scripts and (manual) recipes
 
 to help you
 
@@ -15,8 +15,8 @@ to help you
 
 (not just) lecture videos to the web. These lecture videos consist of
 
-* a screencast and 
-* lecture hall video, plus 
+* a screencast and
+* lecture hall video, plus
 * two user-selectable audio streams.
 
 The player arranges for synchronized playback of these streams and allows some
@@ -26,10 +26,10 @@ minimal non-linear editing.
 
 LectureTube was written for my [High-Performance Computing
 class](http://wiki.tiker.net/Teaching/HPCFall2012) at NYU.  The class web page
-contains links to a lecture's worth of videos. The motivation for writing it
-was that the class contains many live demonstrations in code and use of
-machines that would not be adequately captured if we relied on just slides or
-notes.
+contains links to (eventually) a whole semester's worth of videos. The
+motivation for writing it was that the class contains many live demonstrations
+in code and use of machines that would not be adequately captured if we relied
+on just slides or notes.
 
 Browser support:
 * Chrome
@@ -71,7 +71,7 @@ Andreas Kloeckner <inform@itker.net>
 
 Nice to have:
 
-* A tripod to hold up the camera (and a strip of velcro, because most 
+* A tripod to hold up the camera (and a strip of velcro, because most
   webcams don't have tripod mounting holes)
 * A lavalier microphone to capture decent-quality speaker audio
 
@@ -229,7 +229,7 @@ your final screen capture.
 
 Make a copy of `upload/metadata/example.json` and open that in a text editor.
 This is a [JSON file](https://en.wikipedia.org/wiki/JSON), which has a specific
-syntax. 
+syntax.
 
 Add all your media files as parts of the `"media"` array, giving each of them a
 unique `"id"` field.  Using the `"target"` property you can set where the video
