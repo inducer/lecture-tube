@@ -45,7 +45,7 @@ way.
 
 Andreas Kloeckner <inform@itker.net>
 
-## Related guides and project
+## Related guides and projects
 
 * [OpenCast Matterhorn (U Osnabrück/ETH Zürich](http://opencast.org/matterhorn/)
   (aims at large-scale, organization-wide use)
@@ -65,6 +65,12 @@ Andreas Kloeckner <inform@itker.net>
   (optional, provides focus/exposure controls during capture)
 
 (For now, you need both gstreamer versions, because of a bug.)
+
+Nice to have:
+
+* A tripod to hold up the camera (and a strip of velcro, because most 
+  webcams don't have tripod mounting holes)
+* A lavalier microphone to capture decent-quality speaker audio
 
 ## Source material
 
