@@ -1,10 +1,32 @@
 # LectureTube
 
-A JavaScript web player (see `upload/html/`) and a bunch of scripts and recipes
-to help you post lecture videos (with synchronized room video and screen
-capture) to the web.
+## What is this?
+
+Lecture Tube consists of:
+
+* A JavaScript web player (see `upload/html/`) 
+* a bunch of scripts and (manual) recipes 
+
+to help you
+
+* record,
+* post-process, and
+* post
+
+(not just) lecture videos to the web. These lecture videos consist of
+
+* a screencast and 
+* lecture hall video, plus 
+* two user-selectable audio streams.
+
+The player arranges for synchronized playback of these streams and allows some
+minimal non-linear editing.
 
 [Demo](http://www.cs.nyu.edu/courses/fall12/CSCI-GA.2945-001/video/upload/html/player.html?descriptor=metadata/2012-09-05.json)
+
+LectureTube was written for my [High-Performance Computing
+class](http://wiki.tiker.net/Teaching/HPCFall2012) at NYU.  The class web page
+contains links to a lecture's worth of videos. The motivat
 
 Browser support:
 * Chrome
@@ -23,8 +45,15 @@ way.
 
 Andreas Kloeckner <inform@itker.net>
 
+## Related guides and project
 
-Requirements:
+* [OpenCast Matterhorn (U Osnabrück/ETH Zürich](http://opencast.org/matterhorn/)
+  (aims at large-scale, organization-wide use)
+* [Erik Demaine's guide (MIT)](http://erikdemaine.org/classes/recording/)
+  (about $4000 in equipment cost, plus a live camera operator)
+* this guide (about $100 in equipment cost, unattended recording)
+
+## Requirements
 
 * A good webcam (see below)
 * [gstreamer 0.10](http://gstreamer.org) (postprocessing)
@@ -49,6 +78,9 @@ perhaps not so important, but
 generally easier to deal with than non-UVC webcams. In addition, that model
 (and its successors) can record in
 [1080p](https://en.wikipedia.org/wiki/1080p).
+
+We attach the webcam to the top of a (cheapo) tripod using a looped strip of
+velcro.
 
 Our current approach to capturing what's going on in the classroom is to use
 gstreamer. I've packaged this up in a script:
@@ -103,7 +135,7 @@ and earlier gave us terrible trouble when trying to maintain reasonable sync
 through ~2h of video.  The author assured me that v1.6.1 fixes this, but I
 haven't verified that claim.
 
-### Capturing the screen
+### Capturing screen and speaker audio
 
 Use the command line
 
@@ -277,6 +309,12 @@ warning you of fun up ahead.
 
 Next, AVI is a format without absolute timestamps, so you may also need the
 previous answer.
+
+### One of my recording streams failed/produced garbage
+
+That's why we have two, room and screen. That way, if one fails, the other can
+partially cover the loss. We've run into several scenarios that, with just one
+stream, would have left us entirely without coverage.
 
 ## License
 

@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 import gobject
+import sys
 gobject.threads_init()
 
 from dbus.mainloop.glib import DBusGMainLoop
@@ -14,4 +15,5 @@ iface = dbus.Interface(okular, 'org.kde.okular')
 from time import sleep, time
 while True:
     print time(), iface.currentPage()
+    sys.stdout.flush()
     sleep(1)

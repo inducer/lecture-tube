@@ -779,6 +779,7 @@ $().ready(function()
 {
   set_message("banner",
     "<strong><a href=\"https://github.com/inducer/lecture-tube\">LectureTube</a> 2012.1alpha</strong>"
+    +"<br>by Andreas Kloeckner"
     +"<br><i>Available under the MIT license</i>");
 
 
