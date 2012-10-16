@@ -53,7 +53,7 @@ Andreas Kloeckner <inform@itker.net>
 * [OpenCast Matterhorn (U Osnabrück/ETH Zürich)](http://opencast.org/matterhorn/)
   (aims at large-scale, organization-wide use)
 * [Erik Demaine's guide (MIT)](http://erikdemaine.org/classes/recording/)
-  (about $4000 in equipment cost, plus a live camera operator)
+  (about $2000 in equipment cost, plus a live camera operator)
 * this guide (about $100 in equipment cost, unattended recording)
 
 ## Requirements
