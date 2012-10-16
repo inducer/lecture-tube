@@ -26,7 +26,10 @@ minimal non-linear editing.
 
 LectureTube was written for my [High-Performance Computing
 class](http://wiki.tiker.net/Teaching/HPCFall2012) at NYU.  The class web page
-contains links to a lecture's worth of videos. The motivat
+contains links to a lecture's worth of videos. The motivation for writing it
+was that the class contains many live demonstrations in code and use of
+machines that would not be adequately captured if we relied on just slides or
+notes.
 
 Browser support:
 * Chrome
