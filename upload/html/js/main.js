@@ -205,47 +205,47 @@ function set_up_jump_points()
 {
   // {{{ process slides
 
-  var slides = show_info.slide_data;
-
-  if (slides == null || slides.length == 0)
-    return;
-
-  var sync_ref_time = parse_abs_time(show_info.sync_slide_time);
-
-  // find sync slide number
-  var sync_slide_index;
-
-  for (var i = 0; i < slides.length; ++i)
-  {
-    var nr = slides[i][0], timestamp = slides[i][1];
-    if (nr == show_info.sync_slide_number)
-    {
-      sync_slide_index = i;
-      break;
-    }
-  }
-
-  if (sync_slide_index == null)
-  {
-    alert("Slide for synchronization not found.");
-    return;
-  }
-
-  var sync_slide_timestamp = slides[sync_slide_index][1];
-
-  // }}}
-
-  // {{{ build jump point list in memory
-  //
   var all_jump_points = [];
-  all_jump_points.push(["Start", show_info.start_time])
-  for (var i = 0; i < slides.length; ++i)
+
+  var slides = show_info.slide_data;
+  if (!(slides == null || slides.length == 0))
   {
-    var nr = slides[i][0], timestamp = slides[i][1];
-    var new_slide_time = timestamp - sync_slide_timestamp + sync_ref_time;
-    if (new_slide_time < 0)
-      new_slide_time = 0;
-    all_jump_points.push([sprintf("Slide %d", nr), new_slide_time])
+    var sync_ref_time = parse_abs_time(show_info.sync_slide_time);
+
+    // find sync slide number
+    var sync_slide_index;
+
+    for (var i = 0; i < slides.length; ++i)
+    {
+      var nr = slides[i][0], timestamp = slides[i][1];
+      if (nr == show_info.sync_slide_number)
+      {
+        sync_slide_index = i;
+        break;
+      }
+    }
+
+    if (sync_slide_index == null)
+    {
+      alert("Slide for synchronization not found.");
+      return;
+    }
+
+    var sync_slide_timestamp = slides[sync_slide_index][1];
+
+    // }}}
+
+    // {{{ build jump point list in memory
+
+    all_jump_points.push(["Start", show_info.start_time])
+    for (var i = 0; i < slides.length; ++i)
+    {
+      var nr = slides[i][0], timestamp = slides[i][1];
+      var new_slide_time = timestamp - sync_slide_timestamp + sync_ref_time;
+      if (new_slide_time < 0)
+        new_slide_time = 0;
+      all_jump_points.push([sprintf("Slide %d", nr), new_slide_time])
+    }
   }
 
   var jump_points = show_info.jump_points;
@@ -256,7 +256,7 @@ function set_up_jump_points()
       var label = jump_points[i][0];
       var time = parse_abs_time(jump_points[i][1]);
 
-      all_jump_points.push([label, time])
+      all_jump_points.push([sprintf("<b>%s</b>", label), time])
     }
   }
 

@@ -10,4 +10,4 @@ if test -f "$TGT" ; then
   exit 1
 fi
 
-ffmpeg -ac 1 -f alsa -i default -r 10 -s 1024x768 -f x11grab -i :0 -sameq -f webm - > $TGT
+ffmpeg -ac 1 -f alsa -i default -r 10 -s 1024x768 -f x11grab -i "$DISPLAY" -sameq -f webm - > $TGT
