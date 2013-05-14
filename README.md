@@ -46,7 +46,7 @@ modifications in this case.
 Note that all of this is a work in progress. We're currently learning our
 way.
 
-Andreas Kloeckner <inform@itker.net>
+Andreas Kloeckner <inform@tiker.net>
 
 ## Related guides and projects
 
