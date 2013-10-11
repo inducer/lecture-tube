@@ -220,7 +220,7 @@ The screen capture gets recorded in streaming mode. This is good because that
 means the file is usable even if your machine crashes. It's bad because the
 resulting file is not seekable. This command fixes that:
 
-    ffmpeg -i screencap.webm -codec copy processed-screencap.webm
+    avconv -i screencap.webm -codec copy processed-screencap.webm
 
 If the audio is broken (it happens), simply add `-an`. The resulting file is
 your final screen capture.
