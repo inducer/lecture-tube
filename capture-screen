@@ -10,4 +10,22 @@ if test -f "$TGT" ; then
   exit 1
 fi
 
-avconv -ac 1 -f pulse -i default -r 10 -s 1024x768 -f x11grab -i "$DISPLAY" -f webm - > $TGT
+#avconv -ac 1 -f alsa -i default -r 10 -s 1024x768 -f x11grab -i "$DISPLAY" -f webm - > $TGT
+pavucontrol &
+
+gst-launch-1.0 \
+    webmmux name=mux ! filesink location="$TGT" \
+    \
+    ximagesrc \
+    ! videoscale \
+    ! 'video/x-raw,width=(int)1024,height=(int)768,framerate=(fraction)10/1' \
+    ! videoconvert \
+    ! queue \
+    ! vp8enc \
+    ! mux. \
+    \
+    pulsesrc \
+    ! queue \
+    ! audioconvert \
+    ! vorbisenc \
+    ! mux. \
