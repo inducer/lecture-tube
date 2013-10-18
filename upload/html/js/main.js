@@ -780,13 +780,17 @@ $().ready(function()
   set_message("banner",
     "<strong><a href=\"https://github.com/inducer/lecture-tube\">LectureTube</a> 2012.1alpha</strong>"
     +"<br>by Andreas Kloeckner"
-    +"<br><i>Available under the MIT license</i>");
+    +"<br><i>Available under the MIT license</i>",
+    20*1000);
 
 
   if (!$.browser.chrome)
   {
-    set_message("warning", "LectureTube works best in Google Chrome for now. See the "
-      +"<a href=\"https://github.com/inducer/lecture-tube\">project page</a> for more info.");
+    set_message("warning", "<p>LectureTube works best in Google Chrome for now. See the "
+      +"<a href=\"https://github.com/inducer/lecture-tube\">project page</a> for more info. "
+      +"You can hit the 'return to beginning' button at the top left a few times. "
+      +"This may help on Firefox.</p>", 20*1000
+      );
   }
 
   // {{{ audio handling
