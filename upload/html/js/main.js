@@ -812,19 +812,6 @@ $().ready(function()
 
   // {{{ UI setup
 
-  $("body").layout({
-    // applyDemoStyles: true,
-    east__size: ($(window).width()-10)*(.43),
-    north__closable: false,
-    north__spacing_open: 0,
-    north__resizable: false,
-    north__size: 45,
-
-    south__size: 220,
-    south__resizeable: true,
-    south__slidable: false,
-  });
-
   $("#position-slider").slider({
     disabled: true, // until we know our duration
     slide: (function (evt)
@@ -885,8 +872,28 @@ $().ready(function()
       success:
         function(data, text_status)
         {
+          $("#loadingoverlay").hide("fade");
+
           set_message("progress", "Loaded, initializing...");
           show_info = data;
+
+          var width_fraction = show_info.right_width_fraction;
+
+          if (width_fraction == null)
+            width_fraction = .43;
+
+          $("body").layout({
+            // applyDemoStyles: true,
+            east__size: ($(window).width()-10)*width_fraction,
+            north__closable: false,
+            north__spacing_open: 0,
+            north__resizable: false,
+            north__size: 45,
+
+            south__size: 220,
+            south__resizeable: true,
+            south__slidable: false,
+          });
 
           if (show_info.title != null)
             $("#title-text").html(show_info.title);

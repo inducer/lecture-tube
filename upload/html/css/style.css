@@ -71,6 +71,33 @@ video {
   margin-bottom:0.5em;
 }
 
+#loadingoverlay {
+  position:fixed;
+  top: 50%;
+  left: 50%;
+  width:10em;
+  height:6ex;
+  margin-top: -3ex; /*set to a negative number 1/2 of your height*/
+  margin-left: -5em; /*set to a negative number 1/2 of your width*/
+  background-color: #555;
+  font-size:24pt;
+  z-index:20;
+  text-align:center;
+  color:white;
+  border-radius:10px;
+  display:table-cell;
+  vertical-align:middle;
+}
+#loadingoverlay > div {
+  position:fixed;
+  top: 50%;
+  left: 50%;
+  width:6em;
+  height:2.5ex;
+  margin-left: -3em;
+  margin-top: -1.25ex; /*set to a negative number 1/2 of your height*/
+}
+
 /* ui.layout ------------------------------------------------------------------ */
 
 .ui-layout-resizer {
