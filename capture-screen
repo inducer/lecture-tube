@@ -14,14 +14,14 @@ fi
 pavucontrol &
 
 gst-launch-1.0 \
-    webmmux name=mux ! filesink location="$TGT" \
+    matroskamux streamable=true name=mux ! filesink location="$TGT" \
     \
     ximagesrc \
     ! videoscale \
-    ! 'video/x-raw,width=(int)1024,height=(int)768,framerate=(fraction)10/1' \
+    ! 'video/x-raw,width=(int)1024,height=(int)768,framerate=(fraction)5/1' \
     ! videoconvert \
     ! queue \
-    ! vp8enc \
+    ! theoraenc \
     ! mux. \
     \
     pulsesrc \
