@@ -284,6 +284,12 @@ validator](http://jsonlint.com/). It'll tell you what you need to fix.
 
 ## Recovering from accidents
 
+### Audio levels too low
+
+This command will help:
+
+    avconv -i lec21-screen.webm -codec:v copy -filter:a 'volume=volume=3' lec21-screen-amp.webm
+
 ### I recorded with an audio rate that is not an integer multiple of my frame rate
 
 Some part of your video processing pipeline will drop frames on you, and
