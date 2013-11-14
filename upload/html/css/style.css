@@ -80,7 +80,7 @@ video {
   margin-top: -3ex; /*set to a negative number 1/2 of your height*/
   margin-left: -5em; /*set to a negative number 1/2 of your width*/
   background-color: #555;
-  font-size:24pt;
+  font-size:18pt;
   z-index:20;
   text-align:center;
   color:white;
