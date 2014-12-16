@@ -11,7 +11,7 @@ if test -f "$TGT" ; then
 fi
 
 #avconv -ac 1 -f alsa -i default -r 10 -s 1024x768 -f x11grab -i "$DISPLAY" -f webm - > $TGT
-pavucontrol &
+gnome-control-center sound &
 
 gst-launch-1.0 \
     matroskamux streamable=true name=mux ! filesink location="$TGT" \

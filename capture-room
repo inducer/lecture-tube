@@ -11,7 +11,7 @@ if test -f "$TGT" ; then
 fi
 
 QARGS="max-size-bytes=1000000000 max-size-time=0"
-pavucontrol &
+gnome-control-center sound &
 guvcview -o > /dev/null 2>&1 &
 
 for i in 6 5 4 3 2 1; do
@@ -20,8 +20,8 @@ for i in 6 5 4 3 2 1; do
 done
 
 gst-launch-1.0 --eos-on-shutdown \
-  v4l2src device="/dev/video0" \
-  ! 'image/jpeg,width=(int)1920,height=(int)1080,framerate=(fraction)15/1' \
+  v4l2src device="/dev/video1" \
+  ! 'image/jpeg,width=(int)1920,height=(int)1080,framerate=(fraction)10/1' \
   ! tee name=jpeg-video-t \
   \
   jpeg-video-t. \
@@ -34,7 +34,6 @@ gst-launch-1.0 --eos-on-shutdown \
   jpeg-video-t. \
   ! queue $QARGS \
   ! matroskamux name=mux streamable=true \
-  ! queue $QARGS \
   ! filesink location="$TGT" \
   \
   pulsesrc \
